@@ -5,7 +5,8 @@
   "description": "Siemple IoT Platform - Agent",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/gj-martinez/piot/issues"
   },
-  "homepage": "https://github.com/gj-martinez/piot#readme"
+  "homepage": "https://github.com/gj-martinez/piot#readme",
+  "devDependencies": {
+    "standard": "^16.0.4"
+  }
 }
