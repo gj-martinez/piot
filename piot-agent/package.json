@@ -20,5 +20,11 @@
   "homepage": "https://github.com/gj-martinez/piot#readme",
   "devDependencies": {
     "standard": "^16.0.4"
+  },
+  "dependencies": {
+    "debug": "^4.3.3",
+    "defaults": "^1.0.3",
+    "mqtt": "^4.3.0",
+    "uuid": "^8.3.2"
   }
 }
