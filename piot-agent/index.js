@@ -15,7 +15,7 @@ const options = {
   username: 'test',
   interval: 5000,
   mqtt: {
-    port: 1884
+    host: 'mqtt://localhost:1884'
   }
 }
 
@@ -80,6 +80,7 @@ class PiotAgent extends EventEmitter {
                 }
     
                 debug('Sending', message)
+                console.log(JSON.stringify(message))
     
                 this._client.publish('agent/message', JSON.stringify(message))
                 this.emit('message', message)
