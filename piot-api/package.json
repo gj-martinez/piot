@@ -5,6 +5,7 @@
   "description": "Simple IoT Plataform - API",
   "main": "server.js",
   "scripts": {
+    "test": "DEBUG=piot:* ava --verbose",
     "start": "NODE_ENV=production node server.js",
     "start-dev": "DEBUG=piot:* nodemon server.js",
     "lint": "standard"
@@ -20,12 +21,18 @@
   },
   "homepage": "https://github.com/gj-martinez/piot#readme",
   "devDependencies": {
+    "ava": "^3.15.0",
     "nodemon": "^2.0.15",
-    "standard": "^16.0.4"
+    "standard": "^16.0.4",
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "chalk": "^5.0.0",
     "debug": "^4.3.3",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "express-asyncify": "^1.0.1",
+    "piot-db": "file:../piot-db",
+    "proxyquire": "^2.1.3",
+    "sinon": "^12.0.1"
   }
 }
