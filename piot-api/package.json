@@ -1,0 +1,31 @@
+{
+  "name": "piot-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple IoT Plataform - API",
+  "main": "server.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "start-dev": "DEBUG=piot:* nodemon server.js",
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gj-martinez/piot.git"
+  },
+  "author": "gonzalo martinez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gj-martinez/piot/issues"
+  },
+  "homepage": "https://github.com/gj-martinez/piot#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "standard": "^16.0.4"
+  },
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "debug": "^4.3.3",
+    "express": "^4.17.2"
+  }
+}
