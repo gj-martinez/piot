@@ -10,8 +10,8 @@ const agentFixtures = require('./fixtures/agent')
 let sandbox = null
 let server = null
 let dbStub = null
-let AgentStub = {}
-let MetricStub = {}
+const AgentStub = {}
+const MetricStub = {}
 
 test.beforeEach(async () => {
   sandbox = sinon.createSandbox()
@@ -41,6 +41,7 @@ test.afterEach(() => {
 test.serial.cb('/api/agents', t => {
   request(server)
     .get('/api/agents')
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -52,6 +53,7 @@ test.serial.cb('/api/agents', t => {
     })
 })
 
+test.serial.todo('/api/agents - not authorized')
 test.serial.todo('/api/agent/:uuid')
 test.serial.todo('/api/agent/:uuid - not found')
 
