@@ -25,6 +25,10 @@
   "dependencies": {
     "debug": "^4.3.3",
     "express": "^4.17.2",
+    "express-asyncify": "^1.0.1",
+    "piot-agent": "file:../piot-agent",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9",
     "socket.io": "^4.4.0"
   }
 }

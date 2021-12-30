@@ -3,28 +3,39 @@
 const debug = require('debug')('piot:web')
 const http = require('http')
 const path = require('path')
+const asyncify = require('express-asyncify')
 const express = require('express')
+const PiotAgent = require('piot-agent')
+
+const proxy = require('./proxy')
+const { pipe } = require('./utils')
 
 const port = process.env.PORT || 8080
-const app = express()
+const app = asyncify(express())
 const server = http.createServer(app)
 const socketio = require('socket.io')
 const io = socketio(server)
+const agent = new PiotAgent()
 
 app.use(express.static(path.join(__dirname, 'public')))
-
+app.use('/', proxy)
 
 // Socket.io / WebSockets
 io.on('connect', socket => {
   debug(`Connected ${socket.id}`)
 
-  socket.on('agent/message', payload => {
-    console.log(payload)
-  })
+  pipe(agent, socket)
+})
 
-  setInterval(() => {
-    socket.emit('agent/message', { agent: 'xxx-yyy' })
-  }, 2000)
+// Express Error Handler
+app.use((err, req, res, next) => {
+  debug(`Error: ${err.message}`)
+
+  if (err.message.match(/not found/)) {
+    return res.status(404).send({ error: err.message })
+  }
+
+  res.status(500).send({ error: err.message })
 })
 
 function handleFatalError (err) {
@@ -38,4 +49,5 @@ process.on('unhandledRejection', handleFatalError)
 
 server.listen(port, () => {
   console.log(`piot web: server listening on port ${port}`)
+  agent.connect()
 })
