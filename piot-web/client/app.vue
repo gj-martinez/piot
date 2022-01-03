@@ -1,5 +1,7 @@
 <template>
   <div>
+    <agent uuid="yyy"></agent>
+    <metric type="memory" uuid="uuid"></metric>
     <agent
       v-for="agent in agents"
       :uuid="agent.uuid"
