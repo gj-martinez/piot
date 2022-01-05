@@ -1,7 +1,6 @@
 <template>
   <div>
-    <agent uuid="yyy"></agent>
-    <metric type="memory" uuid="uuid"></metric>
+    <agent uuid="158f7be8-f42a-48ab-b6c3-174504771f94" :socket="socket"></agent>
     <agent
       v-for="agent in agents"
       :uuid="agent.uuid"
@@ -20,12 +19,15 @@
 </style>
 
 <script>
+const io = require('socket.io-client')
+const socket = io()
 
 module.exports = {
   data () {
     return {
       agents: [],
-      error: null
+      error: null,
+      socket
     }
   },
 
