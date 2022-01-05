@@ -101,13 +101,11 @@ module.exports = {
   methods: {
     async initialize() {
       const { uuid } = this
-
       const options = {
         method: 'GET',
         url: `http://localhost:8080/agent/${uuid}`,
         json: true
       }
-
       let agent
       try {
         agent = await request(options)
@@ -115,24 +113,19 @@ module.exports = {
         this.error = e.error.error
         return
       }
-
       this.name = agent.name
       this.hostname = agent.hostname
       this.connected = agent.connected
       this.pid = agent.pid
-
       this.loadMetrics()
     },
-
     async loadMetrics () {
       const { uuid } = this
-
       const options = {
         method: 'GET',
         url: `http://localhost:8080/metrics/${uuid}`,
         json: true
       }
-
       let metrics
       try {
         metrics = await request(options)
@@ -140,10 +133,16 @@ module.exports = {
         this.error = e.error.error
         return
       }
-
       this.metrics = metrics
-
-      console.log(metrics)
+      this.startRealtime()
+    },
+    startRealtime () {
+      const { uuid, socket } = this
+      socket.on('agent/disconnected', payload => {
+        if (payload.agent.uuid === uuid) {
+          this.connected = false
+        }
+      })
     },
 
     toggleMetrics() {
@@ -214,6 +213,7 @@ var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("body {\n
 //
 //
 
+const request = require('request-promise-native')
 const io = require('socket.io-client')
 const socket = io()
 
@@ -231,7 +231,27 @@ module.exports = {
   },
 
   methods: {
-    initialize () {
+    async initialize () {
+      const options = {
+        method: 'GET',
+        url: 'http://localhost:8080/agents',
+        json: true
+      }
+      let result
+      try {
+        result = await request(options)
+      } catch (e) {
+        this.error = e.error.error
+        return
+      }
+      this.agents = result
+      socket.on('agent/connected', payload => {
+        const { uuid } = payload.agent
+        const existing = this.agents.find(a => a.uuid === uuid)
+        if (!existing) {
+          this.agents.push(payload.agent)
+        }
+      })
     }
   }
 }
@@ -240,7 +260,7 @@ module.exports = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('agent',{attrs:{"uuid":"158f7be8-f42a-48ab-b6c3-174504771f94","socket":_vm.socket}}),_vm._v(" "),_vm._l((_vm.agents),function(agent){return _c('agent',{key:agent.uuid,attrs:{"uuid":agent.uuid}})}),_vm._v(" "),(_vm.error)?_c('p',[_vm._v(_vm._s(_vm.error))]):_vm._e()],2)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.agents),function(agent){return _c('agent',{key:agent.uuid,attrs:{"uuid":agent.uuid,"socket":_vm.socket}})}),_vm._v(" "),(_vm.error)?_c('p',[_vm._v(_vm._s(_vm.error))]):_vm._e()],2)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -253,7 +273,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-061fee93", __vue__options__)
   }
 })()}
-},{"socket.io-client":388,"vue":481,"vue-hot-reload-api":479,"vueify/lib/insert-css":483}],4:[function(require,module,exports){
+},{"request-promise-native":358,"socket.io-client":388,"vue":481,"vue-hot-reload-api":479,"vueify/lib/insert-css":483}],4:[function(require,module,exports){
 'use strict';
 
 var _require = require('vue-chartjs'),
